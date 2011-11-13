@@ -1,0 +1,2 @@
+.rvmrc
+spec/vcr_cassettes/*
