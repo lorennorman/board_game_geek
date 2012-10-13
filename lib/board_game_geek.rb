@@ -34,6 +34,9 @@ module BoardGameGeek
             release_date = name_and_date[2].to_s.strip[1..-2]
             rating       = cells[3]
 
+            game_path = game_row.css(".collection_thumbnail a").first["href"]
+            game_url = "http://boardgamegeek.com" + game_path
+
             image_url = game_row.css(".collection_thumbnail img").first["src"]
             image_url.sub!("_mt", "_t")
 
@@ -41,6 +44,7 @@ module BoardGameGeek
                                     ranking:      ranking,
                                     rating:       rating,
                                     release_date: release_date,
+                                    url:          game_url,
                                     image_url:    image_url)
           end
         end
