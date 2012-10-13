@@ -25,27 +25,36 @@ module BoardGameGeek
             next  if idx == 0
             break if idx > how_many
 
-            cells = game_row.css("td").map(&:inner_text).map(&:strip)
+            begin
+              cells = game_row.css("td").map(&:inner_text).map(&:strip)
 
-            name_and_date = cells[2].to_s.split("\n")
+              name_and_date = cells[2].to_s.split("\n")
 
-            ranking      = cells[0]
-            name         = name_and_date[0]
-            release_date = name_and_date[2].to_s.strip[1..-2]
-            rating       = cells[3]
+              ranking      = cells[0]
+              name         = name_and_date[0]
+              release_date = name_and_date[2].to_s.strip[1..-2]
+              rating       = cells[3]
 
-            game_path = game_row.css(".collection_thumbnail a").first["href"]
-            game_url = "http://boardgamegeek.com" + game_path
+              game_path = game_row.css(".collection_thumbnail a").first["href"]
+              game_url = "http://boardgamegeek.com" + game_path
 
-            image_url = game_row.css(".collection_thumbnail img").first["src"]
-            image_url.sub!("_mt", "_t")
+              image_url = game_row.css(".collection_thumbnail img").first["src"]
+              image_url.sub!("_mt", "_t")
 
-            games << OpenStruct.new(name:         name,
-                                    ranking:      ranking,
-                                    rating:       rating,
-                                    release_date: release_date,
-                                    url:          game_url,
-                                    image_url:    image_url)
+              games << OpenStruct.new(name:         name,
+                                      ranking:      ranking,
+                                      rating:       rating,
+                                      release_date: release_date,
+                                      url:          game_url,
+                                      image_url:    image_url)
+            rescue
+              games << OpenStruct.new(name:         defined?(name)         && name         || "failed parse",
+                                      ranking:      defined?(ranking)      && ranking      || "failed parse",
+                                      rating:       defined?(rating)       && rating       || "failed parse",
+                                      release_date: defined?(release_date) && release_date || "failed parse",
+                                      url:          defined?(game_url)     && game_url     || "failed parse",
+                                      image_url:    defined?(image_url)    && image_url    || "failed parse")
+            end
           end
         end
       end
