@@ -39,6 +39,7 @@ describe BGG::Scraper do
 
     it "exposes some handy attributes" do
       first_game.must_respond_to :name
+      first_game.must_respond_to :url
       first_game.must_respond_to :image_url
       first_game.must_respond_to :rating
       first_game.must_respond_to :ranking
